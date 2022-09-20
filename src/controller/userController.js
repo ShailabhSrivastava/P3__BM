@@ -1,12 +1,13 @@
 const userModel = require('../models/userModel');
-
-const createUser = async (req,res) => {
+//=====================================================createUser===========================================//
+const createUser = async function (req,res) {
     let data = req.body
     let saveData = await userModel.create(data);
     res.status(201).send({status : true, data : saveData});
 };
+//============================================================userLogin================================================//
 
-const userLogin = async (req,res) => {
+const userLogin = async function (req,res)  {
     try{
      const email = req.body.email;
      const password = req.body.password;
@@ -20,13 +21,7 @@ const userLogin = async (req,res) => {
          group: "group-8",
        },"project3");
  
-       res
-         .status(200)
-         .send({
-           status: true,
-           message: "user Login Successful",
-           token: { token },
-         });
+       res.status(200).send({status: true, message: "user Login Successful", token: { token }});
  
     }catch(err)
     {
@@ -35,5 +30,4 @@ const userLogin = async (req,res) => {
  
  }
 
-module.exports.createuser = createUser;
-module.exports.login = userLogin;
+module.exports = {createUser, userLogin}

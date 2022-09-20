@@ -13,7 +13,7 @@ const bookSchema = new mongoose.Schema({
   },
   userId: {
     type: objId,
-    ref: "",
+    ref: "userDetails",
     require: true,
   },
   ISBN: {
@@ -46,4 +46,4 @@ const bookSchema = new mongoose.Schema({
 },{timestamp:true});
 
 
-module.exports = mongoose.model("bookModelListBookManagement",bookSchema);
+module.exports = mongoose.model("books",bookSchema);
