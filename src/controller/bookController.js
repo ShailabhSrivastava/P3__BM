@@ -2,6 +2,7 @@ const bookModel=require("../model/bookModel");
 const reviewModel = require("../model/reviewModel");
 const userModel=require("../model/userModel")
 const validateBody = require('../validation/validation');
+const mongoose=require("mongoose")
 const ObjectId = require('mongoose').Types.ObjectId
 
 const createBook = async function(req,res){
@@ -143,7 +144,7 @@ const getBookById = async function(req, res) {
         }
 
 
-        const bookData = await bookModel.findOne({ _id: bookId })
+        const bookData = await bookModel.findOne({ _id: bookId }).lean()
         if (!bookData) {
             return res.status(404).send({ status: false, msg: "this bookId is not found inside the bookModel" })
         }
@@ -165,7 +166,32 @@ const getBookById = async function(req, res) {
 
 
 
-module.exports = { getBookById ,createBook,getBook}
+const updateBook = async function (req, res) {
+    try {
+        const bookData = req.body
+        if (!validateBody.isValidRequestBody(bookData)) {return res.status(404).send({status:false, msg: "Please provide Data"})}
+        let BOOK = req.params.bookId
+        if (!mongoose.Types.ObjectId.isValid(BOOK)) { return res.status(404).send({ status: false, data: "ID not Found in path param" }) }
+        let book = await bookModel.findOneAndUpdate( 
+            {  _id: BOOK },
+            {
+                $set: { title: bookData.title, excerpt: bookData.excerpt, ISBN: bookData.ISBN, releasedAt: Date.now() },
+            },
+            { new: true });
+            if (book.isDeleted == true) {
+                return res.status(404).send({ status: false, msg: " this Book is Deleted" })
+            }
+        return res.status(200).send({ status: true, data: book });
+    } 
+    catch (error) {
+        return res.status(500).send({ status: false, Error: error.message })
+    }
+  }
+  
+
+
+
+module.exports = { getBookById ,createBook,getBook,updateBook}
 
 
 
