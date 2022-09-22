@@ -82,7 +82,7 @@ const userLogin = async (req,res) => {
           return res.status(400).send({ status: false, message: "Please provide password or password field" });;
       }
      let checkData = await userModel.findOne({email : email , password : password});
-     console.log(checkData);
+  
      if(!checkData) return res.status(400).send({status : false, msg: "This email and password is not exist"});
  
      let token = jwt.sign({

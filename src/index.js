@@ -16,9 +16,9 @@ mongoose.connect("mongodb+srv://ShailabhSrivastava:LtR74yQBXKkSdvyd@cluster0.cxb
 .catch ( err => console.log(err) )
 
 app.use('/', route);
-// app.all("/*", function (req, res) {
-//     res.status(400).send({ status: false, message: "invalid http request" });
-//   });
+app.all("/*", function (req, res) {
+    res.status(400).send({ status: false, message: "invalid http request" });
+  });
 
 
 

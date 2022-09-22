@@ -187,11 +187,30 @@ const updateBook = async function (req, res) {
         return res.status(500).send({ status: false, Error: error.message })
     }
   }
+
+
+
+  const deleteBooks = async function (req, res) {
+
+    try {
+        let data = req.params
+        if (!validateBody.isValidRequestBody(data)) {return res.status(404).send({status:false, msg: "Please provide Data"})}
+        let BOOK = req.params.bookId
+        if (!mongoose.isValidObjectId(BOOK)) { return res.status(404).send({ status: false, data: "ID not Found in path param" }) }
+        let deletedBook = await bookModel.findOneAndUpdate({ _id: BOOK }, { isDeleted: true,isDeletedAt:nowDate()} 
+            , { new: true });
+            
+        res.status(200).send({ status: true, msg: deletedBook })
+    } catch (error) {
+        res.status(500).send({ status: false, Error: error.message })
+    }
+  }
+
   
 
 
 
-module.exports = { getBookById ,createBook,getBook,updateBook}
+module.exports = { getBookById ,createBook,getBook,updateBook,deleteBooks}
 
 
 

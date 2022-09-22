@@ -24,4 +24,22 @@ const authenticator = function (req, res, next) {
     }
 };
 
-module.exports.authenticator = authenticator;
+
+const authorization = async function (req, res, next) {
+    try {
+        let token = req.headers["x-api-key"]
+        if (!token) return res.status(401).send({ msg: "token must be present", status: false })
+        let bookId = req.params.bookId
+        let decodeToken = jwt.verify(token, "project-3")
+        let userLoggedIn = decodeToken.authorId.toString()
+        if (bookId) {
+        let author = await book.findById(bookId).select({ authorId: 1, _id: 0 })
+        let userToBeModified = author.authorId.toString()
+        if (userToBeModified != userLoggedIn) return res.status(403).send({ status: false, msg: 'User logged is not allowed to modify the requested users data' })
+        next()
+        } 
+    } catch (err) {
+        res.status(500).send({ msg: "ERROR", error: err.message })
+    }
+}
+module.exports= {authenticator,authorization}
