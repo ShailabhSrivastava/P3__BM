@@ -127,6 +127,23 @@ const getBook = async (req, res) => {
     }
   };
 
+// let getBook = async (req, res) => {
+//     try {
+//         let filterBook = req.query
+//         if (filterBook.userId) {
+//             if (!mongoose.Types.ObjectId.isValid(filterBook.userId)) return res.status(400).send({ status: false, message: 'Invalid UserId Format' })
+//         }
+//         if (filterBook.subcategory) {
+//             filterBook.subcategory = { $in: filterBook.subcategory.split(',') };
+//         }
+//         let data = await bookModel.find({ $and: [filterBook, { isDeleted: false }] }).select({ title: 1, excerpt: 1, category: 1, releasedAt: 1, userId: 1, reviews: 1 }).sort({ title: 1 })
+//         if (Object.keys(data).length == 0) return res.status(404).send({ status: false, message: 'Book not found' })
+//         res.status(200).send({ status: true, message: 'Book list', data: data })
+//     }
+//     catch (err) {
+//         return res.status(500).send({ status: false, message: err.message })
+//     }
+// }
 
 
   //=================================================getBookById==================================================//
@@ -144,7 +161,7 @@ const getBookById = async function(req, res) {
         }
 
 
-        const bookData = await bookModel.findOne({ _id: bookId }).lean()
+        const bookData = await bookModel.findOne({ _id: bookId })
         if (!bookData) {
             return res.status(404).send({ status: false, msg: "this bookId is not found inside the bookModel" })
         }
@@ -154,9 +171,10 @@ const getBookById = async function(req, res) {
 
         const reviewsData = await reviewModel.find({ bookId: bookId })
            
-        const data = {...bookData, reviewsData: reviewsData }
+        // const data = {...bookData, reviewsData: reviewsData }
+        bookData._doc["reviewsData"]=reviewsData
 
-        return res.status(200).send({ status: "true", message: data })
+        return res.status(200).send({ status: "true", message: bookData })
 
     } catch (error) {
 
@@ -197,7 +215,7 @@ const updateBook = async function (req, res) {
         if (!validateBody.isValidRequestBody(data)) {return res.status(404).send({status:false, msg: "Please provide Data"})}
         let BOOK = req.params.bookId
         if (!mongoose.isValidObjectId(BOOK)) { return res.status(404).send({ status: false, data: "ID not Found in path param" }) }
-        let deletedBook = await bookModel.findOneAndUpdate({ _id: BOOK }, { isDeleted: true,isDeletedAt:nowDate()} 
+        let deletedBook = await bookModel.findOneAndUpdate({ _id: BOOK }, { isDeleted: true, deletedAt: new Date()} 
             , { new: true });
             
         res.status(200).send({ status: true, msg: deletedBook })
@@ -211,8 +229,3 @@ const updateBook = async function (req, res) {
 
 
 module.exports = { getBookById ,createBook,getBook,updateBook,deleteBooks}
-
-
-
-
-

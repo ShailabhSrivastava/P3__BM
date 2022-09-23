@@ -1,4 +1,5 @@
-const jwt=require("jsonwebtoken")
+const jwt=require("jsonwebtoken");
+const bookModel = require("../model/bookModel");
 
 
 const authenticator = function (req, res, next) {
@@ -20,6 +21,7 @@ const authenticator = function (req, res, next) {
                 .send({ status: false, message: "Token is not valid" });
         }
     } catch (err) {
+   
         return res.status(500).send({ status: false, mess: err.message });
     }
 };
@@ -33,8 +35,8 @@ const authorization = async function (req, res, next) {
         let decodeToken = jwt.verify(token, "project-3")
         let userLoggedIn = decodeToken.authorId.toString()
         if (bookId) {
-        let author = await book.findById(bookId).select({ authorId: 1, _id: 0 })
-        let userToBeModified = author.authorId.toString()
+        let user = await bookModel.findById(bookId).select({ userId: 1, _id: 0 })
+        let userToBeModified = user.userId.toString()
         if (userToBeModified != userLoggedIn) return res.status(403).send({ status: false, msg: 'User logged is not allowed to modify the requested users data' })
         next()
         } 
