@@ -13,9 +13,9 @@ const createReview = async function(req, res) {
   try {
 
       const bookId = req.params.bookId
-      if (!validateBody.isValid(bookId)) {
-          return res.status(400).send({ status: false, message: "Invalid bookId" })
-      }
+    //   if (!validateBody.isValid(bookId)) {
+    //       return res.status(400).send({ status: false, message: "Invalid bookId" })
+    //   }
       const deletedBook = await bookModel.findOne({ _id: bookId })
       if (!deletedBook) {
           return res.status(404).send({ status: false, message: "This book is not present." })
@@ -61,9 +61,9 @@ const createReview = async function(req, res) {
 
 
       if (review) {
-          if (!isValid(review)) {
-              return res.status(400).send({ status: false, message: "Invalid review or review is not mentioned." })
-          }
+        //   if (!isValid(review)) {
+        //       return res.status(400).send({ status: false, message: "Invalid review or review is not mentioned." })
+        //   }
           final.review = review
       }
       
