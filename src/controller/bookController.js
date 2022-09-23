@@ -1,4 +1,4 @@
-const bookModel=require("../model/bookModel");
+ const bookModel=require("../model/bookModel");
 const reviewModel = require("../model/reviewModel");
 const userModel=require("../model/userModel")
 const validateBody = require('../validation/validation');
@@ -65,85 +65,85 @@ const createBook = async function(req,res){
 
 
 
-const getBook = async (req, res) => {
-    let filter = { isDeleted: false };
-    let data = req.query;
-    let { userId, category, subcategory } = data;
-    if (Object.keys(data) < 1)
-      return res.status(400).send({
-        status: false,
-        msg: "Please Provide some data in query params",
-      });
+// const getBook = async (req, res) => {
+//     let filter = { isDeleted: false };
+//     let data = req.query;
+//     let { userId, category, subcategory } = data;
+//     if (Object.keys(data) < 1)
+//       return res.status(400).send({
+//         status: false,
+//         msg: "Please Provide some data in query params",
+//       });
   
   
   
-    if (userId) {
-      let saveData = await bookModel
-        .find({ filter, userId })
-        .select({
-          _id: 1,
-          title: 1,
-          excerpt: 1,
-          userId: 1,
-          category: 1,
-          releasedAt: 1,
-          reviews: 1,
-        })
-        .sort({title:1})
+//     if (userId) {
+//       let saveData = await bookModel
+//         .find({ filter, userId })
+//         .select({
+//           _id: 1,
+//           title: 1,
+//           excerpt: 1,
+//           userId: 1,
+//           category: 1,
+//           releasedAt: 1,
+//           reviews: 1,
+//         })
+//         .sort({title:1})
         
-      // console.log(saveData);
-      res.status(200).send({ status: true, data: saveData });
-    } else if (category) {
-      let saveData = await bookModel
-        .find({ filter, category })
-        .select({
-          _id: 1,
-          title: 1,
-          excerpt: 1,
-          userId: 1,
-          category: 1,
-          releasedAt: 1,
-          reviews: 1,
-        })
-        .sort({title:1})
+//       // console.log(saveData);
+//       res.status(200).send({ status: true, data: saveData });
+//     } else if (category) {
+//       let saveData = await bookModel
+//         .find({ filter, category })
+//         .select({
+//           _id: 1,
+//           title: 1,
+//           excerpt: 1,
+//           userId: 1,
+//           category: 1,
+//           releasedAt: 1,
+//           reviews: 1,
+//         })
+//         .sort({title:1})
         
-      // console.log(saveData)
-      res.status(200).send({ status: true, data: saveData });
-    } else if (subcategory) {
-      let saveData = await bookModel
-        .find({ filter, subcategory })
-        .select({
-          _id: 1,
-          title: 1,
-          excerpt: 1,
-          userId: 1,
-          category: 1,
-          releasedAt: 1,
-          reviews: 1,
-        })
-        .sort({title:1})
-      // console.log(saveData);
-      res.status(200).send({ status: true, data: saveData });
-    }
-  };
+//       // console.log(saveData)
+//       res.status(200).send({ status: true, data: saveData });
+//     } else if (subcategory) {
+//       let saveData = await bookModel
+//         .find({ filter, subcategory })
+//         .select({
+//           _id: 1,
+//           title: 1,
+//           excerpt: 1,
+//           userId: 1,
+//           category: 1,
+//           releasedAt: 1,
+//           reviews: 1,
+//         })
+//         .sort({title:1})
+//       // console.log(saveData);
+//       res.status(200).send({ status: true, data: saveData });
+//     }
+//   };
 
-// let getBook = async (req, res) => {
-//     try {
-//         let filterBook = req.query
-//         if (filterBook.userId) {
-//             if (!mongoose.Types.ObjectId.isValid(filterBook.userId)) return res.status(400).send({ status: false, message: 'Invalid UserId Format' })
-//         }
-//         if (filterBook.subcategory) {
-//             filterBook.subcategory = { $in: filterBook.subcategory.split(',') };
-//         }
-//         let data = await bookModel.find({ $and: [filterBook, { isDeleted: false }] }).select({ title: 1, excerpt: 1, category: 1, releasedAt: 1, userId: 1, reviews: 1 }).sort({ title: 1 })
-//         if (Object.keys(data).length == 0) return res.status(404).send({ status: false, message: 'Book not found' })
-//         res.status(200).send({ status: true, message: 'Book list', data: data })
-//     }
-//     catch (err) {
-//         return res.status(500).send({ status: false, message: err.message })
-//     }
-// }
+let getBook = async (req, res) => {
+    try {
+        let filterBook = req.query
+        if (filterBook.userId) {
+            if (!mongoose.Types.ObjectId.isValid(filterBook.userId)) return res.status(400).send({ status: false, message: 'Invalid UserId Format' })
+        }
+        if (filterBook.subcategory) {
+            filterBook.subcategory = { $in: filterBook.subcategory.split(',') };
+        }
+        let data = await bookModel.find({ $and: [filterBook, { isDeleted: false }] }).select({ title: 1, excerpt: 1, category: 1, releasedAt: 1, userId: 1, reviews: 1 }).sort({ title: 1 })
+        if (Object.keys(data).length == 0) return res.status(404).send({ status: false, message: 'Book not found' })
+        res.status(200).send({ status: true, message: 'Book list', data: data })
+    }
+    catch (err) {
+        return res.status(500).send({ status: false, message: err.message })
+    }
+}
 
 
   //=================================================getBookById==================================================//
