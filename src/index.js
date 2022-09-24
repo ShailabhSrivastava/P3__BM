@@ -9,7 +9,7 @@ app.use(bodyParser.json());
 
 
 
-mongoose.connect("mongodb+srv://ShailabhSrivastava:LtR74yQBXKkSdvyd@cluster0.cxb6bki.mongodb.net/Shailabh-db", {
+mongoose.connect("mongodb+srv://ShailabhSrivastava:LtR74yQBXKkSdvyd@cluster0.cxb6bki.mongodb.net/Project-3", {
     useNewUrlParser: true
 })
 .then( () => console.log("MongoDb is connected"))
@@ -19,7 +19,6 @@ app.use('/', route);
 app.all("/*", function (req, res) {
     res.status(400).send({ status: false, message: "invalid http request" });
   });
-
 
 
 app.listen(process.env.PORT || 3000, function () {

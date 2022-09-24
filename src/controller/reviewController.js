@@ -76,7 +76,7 @@ const createReview = async function(req, res) {
 
       const data = {...bookData, reviewData: arr }
 
-      return res.status(201).send({ status: true, message: "Review Done", data: data })
+      return res.status(201).send({ status: true, message: "Review Done", data: data.reviewData })
 
   } catch (err) {
       return res.status(500).send({ status: false, message: err.message })
@@ -164,7 +164,7 @@ let deleteReview = async (req, res) => {
       if (!findReview) return res.status(404).send({ status: false, message: 'review not found' });
 
       await reviewModel.findOneAndUpdate({ _id: reviewId, bookId: bookId }, { isDeleted: true })
-      findBook.reviews = findBook.reviews - 1;
+      findBook.reviews = findBook.reviews-1;
       findBook.save();
 
 
