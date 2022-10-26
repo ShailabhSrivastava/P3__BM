@@ -4,6 +4,9 @@ const userController = require("../controller/userController")
 const bookController=require("../controller/bookController")
 const middleWare=require("../middleWare/auth")
 const reviewController=require("../controller/reviewController")
+const awsController = require("../controller/awsController")
+//const aws= require("aws-sdk")
+
 
 
 
@@ -19,5 +22,9 @@ router.delete("/books/:bookId",middleWare.authenticator,middleWare.authorization
 router.post('/books/:bookId/review',reviewController.createReview)
 router.put('/books/:bookId/review/:reviewId',reviewController.updateReview)
 router.delete("/books/:bookId/review/:reviewId",reviewController.deleteReview)
+
+
+router.post("/awsUpload", awsController.fileUpload)
+
 
 module.exports = router;

@@ -5,6 +5,9 @@ const validateBody = require('../validation/validation');
 const mongoose=require("mongoose")
 const ObjectId = require('mongoose').Types.ObjectId
 
+
+//=========================================================createBook============================================================//
+
 const createBook = async function(req,res){
     try {
         const myBody = req.body
@@ -63,6 +66,7 @@ const createBook = async function(req,res){
 
 }
 
+//=================================================================getBooks========================================================//
 
 
 let getBook = async (req, res) => {
@@ -88,13 +92,13 @@ let getBook = async (req, res) => {
 
 const getBookById = async function(req, res) {
     try {
-        bookId = req.params.bookId
+        const bookId = req.params.bookId
 
         if (!bookId) {
             return res.status(400).send({ status: false, message: "Please enter bookId" })
         }
 
-        if (!validateBody.isValid(bookId)) {
+        if (!validateBody.isValidObjectId(bookId)) {
             return res.status(400).send({ status: false, message: "Invalid bookId" })
         }
 
@@ -120,6 +124,7 @@ const getBookById = async function(req, res) {
     }
 }
 
+//=========================================================updateBooks======================================================//
 
 
 const updateBook = async function (req, res) {
@@ -127,7 +132,7 @@ const updateBook = async function (req, res) {
         const bookData = req.body
         if (!validateBody.isValidRequestBody(bookData)) {return res.status(404).send({status:false, msg: "Please provide Data"})}
         let BOOK = req.params.bookId
-        if (!mongoose.Types.ObjectId.isValid(BOOK)) { return res.status(404).send({ status: false, data: "ID not Found in path param" }) }
+        if (!mongoose.isValidObjectId(BOOK)) return res.status(400).send({ status: false, message: 'Id is not found in prsag' });
         let book = await bookModel.findOneAndUpdate( 
             {  _id: BOOK },
             {
@@ -144,6 +149,7 @@ const updateBook = async function (req, res) {
     }
   }
 
+//============================================================deleteBooks================================================//
 
 
   const deleteBooks = async function (req, res) {
@@ -162,8 +168,7 @@ const updateBook = async function (req, res) {
     }
   }
 
-  
 
 
 
-module.exports = { getBookById ,createBook,getBook,updateBook,deleteBooks}
+module.exports = { getBookById ,createBook,getBook,updateBook,deleteBooks }

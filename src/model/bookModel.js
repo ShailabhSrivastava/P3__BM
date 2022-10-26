@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const objId = mongoose.Schema.Types.ObjectId;
+const aws= require("aws-sdk")
 
 const bookSchema = new mongoose.Schema({
   title: {
@@ -39,11 +40,15 @@ const bookSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  releasedAt : {
-    type : Date,
-    require : true
+  releasedAt: {
+    type: Date,
+    require: true
+  },
+  bookCover:{
+    type: String
+    
   }
-},{timestamp:true});
+}, { timestamp: true });
 
 
-module.exports = mongoose.model("bookModel",bookSchema);
+module.exports = mongoose.model("bookModel", bookSchema);
